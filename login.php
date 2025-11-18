@@ -1,0 +1,91 @@
+<?php
+
+session_start();
+$usuarioLogado = $_SESSION['usuario'] ?? null;
+$erro = $_GET['erro'] ?? '';
+?>
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/form.css">
+    <link rel="stylesheet" href="css/login.css">
+    <title>Hanahaki - Login</title>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            Floricultura <br><strong>HANAHAKI</strong>
+        </div>
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="produto.html">Produtos</a>
+            <a href="login.php" class="login-button">Fazer login</a>
+        </nav>
+    </header>
+
+    <main>
+        <?php
+        if ($usuarioLogado) : ?>
+            <section class="container-topo">
+                <div class="topo-direita">
+                    <p>Você já está logado como <strong>
+                            <?php echo htmlspecialchars($usuarioLogado); ?>
+                        </strong></p>
+                    <form action="logout.php" method="post">
+                        <button type="submit" class="botao-sair">Sair</button>
+                    </form>
+                </div>
+                <div class="conteudo">
+                    <a href="admin.php" class="link-adm">Ir para o Painel Administrativo</a>
+                </div>
+            </section>
+        <?php else: ?>
+
+            <section class="container-admin-banner">
+                <h1>Login</h1>
+            </section>
+            <section class="container-form">
+                <div class="form-wrapper">
+                    <?php if ($erro === 'credenciais'): ?>
+                        <p class="mensagem-erro">Usuário ou senha incorretos.</p>
+                    <?php elseif ($erro === 'campos'): ?>
+                        <p class="mensagem-erro">Preencha e-mail e senha.</p>
+                    <?php endif; ?>
+
+                    <form action="autenticar.php" method="post">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="Digite o seu e-mail">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" name="senha" placeholder="Digite a sua senha">
+
+                        <input type="submit" class="botao-cadastrar" value="Entrar">
+                    </form>
+                </div>
+            </section>
+        <?php endif; ?>
+    </main>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function(){
+        var msg = document.querySelector('.mensagem-erro');
+        if(msg){
+            setTimeout(function(){
+                msg.classList.add('oculto');
+            }, 5000);
+        }
+    });
+</script>
+
+</body>
+
+</html>
